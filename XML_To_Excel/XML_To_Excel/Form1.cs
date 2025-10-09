@@ -19,7 +19,13 @@ namespace XML_To_Excel
 
         private void uploadBtn_Click(object sender, EventArgs e)
         {
-
+            DialogResult result = openXmlFile.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+                xmlFileName.Text = openXmlFile.FileName;
+                //Do whatever you want
+                //openFileDialog1.FileName .....
+            }
         }
     }
 }
