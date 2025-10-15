@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -12,6 +14,7 @@ namespace XML_To_Excel
         private Timer timer;
         private Control label;
         private XmlDocument xmlDoc;
+        private XmlDocument xmlTemplateDoc;
 
         public FileConversionForm()
         {
@@ -82,14 +85,22 @@ namespace XML_To_Excel
             }
 
         }
+
         private void saveExcelBtn_Click(object sender, EventArgs e)
         {
-            CreateExcelDocument(xmlDoc);
+            saveExceFile.Filter = "Excel Files| *.xlsx";
+            DialogResult result = saveExceFile.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                CreateExcelDocument(xmlDoc, saveExceFile.FileName);
+            }
         }
 
-        private static void CreateExcelDocument(XmlDocument xmlDoc)
+        private void CreateExcelDocument(XmlDocument xmlDoc, String fileName)
         {
             ExcelPackage.License.SetNonCommercialOrganization("NDOT Noncommercial organization");
+
+            string[] columns = BuildColumnList();
 
             // Create a new Excel package
             using (ExcelPackage package = new ExcelPackage())
@@ -112,20 +123,19 @@ namespace XML_To_Excel
                 int column = 1;
                 int row = 2;
 
+                foreach(string name in columns)
+                {
+                    worksheet.Cells[1, column].Value = name;
+                    column++;
+                }
+
+                column = 1;
+
                 foreach (XmlNode node in childNodes)
                 {
-                    foreach (XmlAttribute attr in node.Attributes)
+                    for (int i = 0; i < columns.Length; i++)
                     {
-                        if (row == 2)
-                        {
-                            var tempRow = row - 1;
-                            worksheet.Cells[tempRow, column].Value = attr.Name;
-                            worksheet.Cells[row, column].Value = UnescapeXMLValue(attr.Value);
-                        }
-                        else
-                        {
-                            worksheet.Cells[row, column].Value = UnescapeXMLValue(attr.Value);
-                        }
+                        worksheet.Cells[row, column].Value = UnescapeXMLValue(node.Attributes[columns[i]]?.Value);
                         column++;
                     }
                     column = 1;
@@ -133,32 +143,31 @@ namespace XML_To_Excel
                 }
 
                 // Save the Excel file
-                var filePath = $"C:\\Users\\alexander.munger\\Documents\\Consultant Cert Update Docs\\Workview Exports\\{parentNode.Name}.xlsx";
-                File.WriteAllBytes(filePath, package.GetAsByteArray());
+                File.WriteAllBytes(fileName, package.GetAsByteArray());
 
-                MessageBox.Show($"Excel file created at {filePath}");
+                MessageBox.Show($"Excel file created at {fileName}");
             }
 
         }
 
         #region Helper Methods
 
-        private static string EscapeXMLValue(string xmlString)
+        private string EscapeXMLValue(string xmlString)
         {
 
             if (xmlString == null)
                 throw new ArgumentNullException("xmlString");
 
-            return xmlString.Replace("&", "&amp;");//.Replace("'", "&apos;").Replace("\"", "&quot;").Replace(">", "&gt;").Replace("<", "&lt;");
+            return xmlString.Replace("&", "&amp;");
         }
 
-        private static string UnescapeXMLValue(string xmlString)
+        private string UnescapeXMLValue(string xmlString)
         {
             if (xmlString == null)
-                throw new ArgumentNullException("xmlString");
+                return "";
 
 
-            return xmlString.Replace("&amp;", "&"); //.Replace("&quot;", "\"").Replace("&gt;", ">").Replace("&lt;", "<").Replace("&apos;", "'");
+            return xmlString.Replace("&amp;", "&");
         }
 
         private void DisplayValidationMessage(bool isValid, bool missingFile = false)
@@ -213,8 +222,33 @@ namespace XML_To_Excel
             timer.Start();
         }
 
+        private string[] BuildColumnList()
+        {
+            List<string> columns = new List<string>();
+
+            string rawXml = File.ReadAllText(templateFileName.Text);
+            rawXml = rawXml.TrimStart('\uFEFF').Trim();
+
+            // Escape invalid XML characters
+            string sanitizedXml = EscapeXMLValue(rawXml);
+
+            xmlTemplateDoc = new XmlDocument();
+            xmlTemplateDoc.Load(new StringReader(sanitizedXml));
+
+            XmlNode root = xmlTemplateDoc.DocumentElement;
+
+            XmlNodeList nodes = root.SelectNodes("//TransferTemplate/InstanceMappings/InstanceMapping/AttributeMappings/XPathAttributeMapping");
+
+            columns.Add("source-id");
+
+            foreach (XmlNode node in nodes)
+            {
+                columns.Add(node.Attributes[0].Value);
+            }
+
+            return columns.ToArray();
+        }
+
         #endregion
-
-
     }
 }

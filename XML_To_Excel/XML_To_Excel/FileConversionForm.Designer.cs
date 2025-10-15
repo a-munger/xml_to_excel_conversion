@@ -44,6 +44,7 @@
             this.uploadTemplateBtn = new System.Windows.Forms.Button();
             this.openTemplateFile = new System.Windows.Forms.OpenFileDialog();
             this.saveExcelBtn = new System.Windows.Forms.Button();
+            this.saveExceFile = new System.Windows.Forms.SaveFileDialog();
             this.excelToXmlGroup.SuspendLayout();
             this.conversionTabControl.SuspendLayout();
             this.xmlTabPage.SuspendLayout();
@@ -196,7 +197,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(696, 401);
+            this.ClientSize = new System.Drawing.Size(871, 502);
             this.Controls.Add(this.conversionTabControl);
             this.Name = "FileConversionForm";
             this.Text = "XML and Excel File Conversion";
@@ -228,6 +229,7 @@
         private System.Windows.Forms.TextBox templateFileName;
         private System.Windows.Forms.OpenFileDialog openTemplateFile;
         private System.Windows.Forms.Button saveExcelBtn;
+        private System.Windows.Forms.SaveFileDialog saveExceFile;
     }
 }
 
