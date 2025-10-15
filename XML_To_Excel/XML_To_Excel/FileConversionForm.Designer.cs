@@ -40,6 +40,10 @@
             this.xmlFileName = new System.Windows.Forms.TextBox();
             this.uploadXmlBtn = new System.Windows.Forms.Button();
             this.excelTabPage = new System.Windows.Forms.TabPage();
+            this.templateFileName = new System.Windows.Forms.TextBox();
+            this.uploadTemplateBtn = new System.Windows.Forms.Button();
+            this.openTemplateFile = new System.Windows.Forms.OpenFileDialog();
+            this.saveExcelBtn = new System.Windows.Forms.Button();
             this.excelToXmlGroup.SuspendLayout();
             this.conversionTabControl.SuspendLayout();
             this.xmlTabPage.SuspendLayout();
@@ -106,21 +110,24 @@
             // 
             // xmlToExcelGroup
             // 
+            this.xmlToExcelGroup.Controls.Add(this.saveExcelBtn);
+            this.xmlToExcelGroup.Controls.Add(this.uploadTemplateBtn);
+            this.xmlToExcelGroup.Controls.Add(this.templateFileName);
             this.xmlToExcelGroup.Controls.Add(this.validateXmlBtn);
             this.xmlToExcelGroup.Controls.Add(this.xmlFileName);
             this.xmlToExcelGroup.Controls.Add(this.uploadXmlBtn);
             this.xmlToExcelGroup.Location = new System.Drawing.Point(21, 31);
             this.xmlToExcelGroup.Name = "xmlToExcelGroup";
-            this.xmlToExcelGroup.Size = new System.Drawing.Size(660, 149);
+            this.xmlToExcelGroup.Size = new System.Drawing.Size(660, 277);
             this.xmlToExcelGroup.TabIndex = 4;
             this.xmlToExcelGroup.TabStop = false;
             this.xmlToExcelGroup.Text = "XML To Excel";
             // 
             // validateXmlBtn
             // 
-            this.validateXmlBtn.Location = new System.Drawing.Point(6, 95);
+            this.validateXmlBtn.Location = new System.Drawing.Point(6, 228);
             this.validateXmlBtn.Name = "validateXmlBtn";
-            this.validateXmlBtn.Size = new System.Drawing.Size(110, 23);
+            this.validateXmlBtn.Size = new System.Drawing.Size(123, 28);
             this.validateXmlBtn.TabIndex = 2;
             this.validateXmlBtn.Text = "Validate XML";
             this.validateXmlBtn.UseVisualStyleBackColor = true;
@@ -137,7 +144,7 @@
             // 
             this.uploadXmlBtn.Location = new System.Drawing.Point(443, 44);
             this.uploadXmlBtn.Name = "uploadXmlBtn";
-            this.uploadXmlBtn.Size = new System.Drawing.Size(123, 23);
+            this.uploadXmlBtn.Size = new System.Drawing.Size(123, 28);
             this.uploadXmlBtn.TabIndex = 0;
             this.uploadXmlBtn.Text = "Upload XML";
             this.uploadXmlBtn.UseVisualStyleBackColor = true;
@@ -154,11 +161,42 @@
             this.excelTabPage.Text = "Excel To XML";
             this.excelTabPage.UseVisualStyleBackColor = true;
             // 
+            // templateFileName
+            // 
+            this.templateFileName.Location = new System.Drawing.Point(6, 126);
+            this.templateFileName.Name = "templateFileName";
+            this.templateFileName.Size = new System.Drawing.Size(431, 22);
+            this.templateFileName.TabIndex = 5;
+            // 
+            // uploadTemplateBtn
+            // 
+            this.uploadTemplateBtn.Location = new System.Drawing.Point(443, 123);
+            this.uploadTemplateBtn.Name = "uploadTemplateBtn";
+            this.uploadTemplateBtn.Size = new System.Drawing.Size(123, 28);
+            this.uploadTemplateBtn.TabIndex = 6;
+            this.uploadTemplateBtn.Text = "Upload Template";
+            this.uploadTemplateBtn.UseVisualStyleBackColor = true;
+            this.uploadTemplateBtn.Click += new System.EventHandler(this.uploadTemplateBtn_Click);
+            // 
+            // openTemplateFile
+            // 
+            this.openTemplateFile.FileName = "templateFile";
+            // 
+            // saveExcelBtn
+            // 
+            this.saveExcelBtn.Location = new System.Drawing.Point(524, 228);
+            this.saveExcelBtn.Name = "saveExcelBtn";
+            this.saveExcelBtn.Size = new System.Drawing.Size(123, 28);
+            this.saveExcelBtn.TabIndex = 7;
+            this.saveExcelBtn.Text = "Save";
+            this.saveExcelBtn.UseVisualStyleBackColor = true;
+            this.saveExcelBtn.Click += new System.EventHandler(this.saveExcelBtn_Click);
+            // 
             // FileConversionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(871, 502);
+            this.ClientSize = new System.Drawing.Size(696, 401);
             this.Controls.Add(this.conversionTabControl);
             this.Name = "FileConversionForm";
             this.Text = "XML and Excel File Conversion";
@@ -186,6 +224,10 @@
         private System.Windows.Forms.Button validateXmlBtn;
         private System.Windows.Forms.TextBox xmlFileName;
         private System.Windows.Forms.Button uploadXmlBtn;
+        private System.Windows.Forms.Button uploadTemplateBtn;
+        private System.Windows.Forms.TextBox templateFileName;
+        private System.Windows.Forms.OpenFileDialog openTemplateFile;
+        private System.Windows.Forms.Button saveExcelBtn;
     }
 }
 
