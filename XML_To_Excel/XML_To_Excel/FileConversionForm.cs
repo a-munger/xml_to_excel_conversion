@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using OfficeOpenXml;
@@ -168,6 +169,15 @@ namespace XML_To_Excel
             return xmlString.Replace("&amp;", "&");
         }
 
+        private string RemoveInvalidChar(string val)
+        {
+            if (val == null)
+                return "";
+
+
+            return val.Replace("@", "");
+        }
+
         private void DisplayValidationMessage(bool isValid, bool missingFile = false)
         {
             if(missingFile)
@@ -234,20 +244,29 @@ namespace XML_To_Excel
             xmlTemplateDoc.Load(new StringReader(sanitizedXml));
 
             XmlNode root = xmlTemplateDoc.DocumentElement;
+            StringBuilder sb = new StringBuilder();
 
-            XmlNodeList nodes = root.SelectNodes("//TransferTemplate/InstanceMappings/InstanceMapping/AttributeMappings/XPathAttributeMapping");
+            XmlNodeList standard_nodes = root.SelectNodes("//TransferTemplate/InstanceMappings/InstanceMapping/AttributeMappings/XPathAttributeMapping");
+            XmlNodeList linked_nodes = root.SelectNodes("//TransferTemplate/InstanceMappings/InstanceMapping/AttributeMappings/LookupAttributeMapping/KeyMappings/XPathAttributeMapping");
+            
+            MessageBox.Show(sb.ToString());
 
             columns.Add("source-id");
 
-            foreach (XmlNode node in nodes)
+            foreach (XmlNode node in standard_nodes)
             {
                 columns.Add(node.Attributes[0].Value);
+            }
+            if (linked_nodes.Count > 0)
+            {
+                foreach (XmlNode node in linked_nodes)
+                {
+                    columns.Add(RemoveInvalidChar(node.Attributes[1].Value));
+                }
             }
 
             return columns.ToArray();
         }
-
-
 
         #endregion
     }
